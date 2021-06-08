@@ -61,6 +61,8 @@ SERVER_NAME=$HOSTNAME
 SENDER=$(whoami)  
 USER="noreply"
 
+
+
 MAIL_TXT="Subject: $SUBJECT\nFrom: $SENDER\nTo: $RECEIVER\n\n$TEXT"  
 echo -e $MAIL_TXT | sendmail -t  
 exit $?  
