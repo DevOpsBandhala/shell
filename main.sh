@@ -53,9 +53,9 @@ cat /tmp/capa.log
 
 
 
-SUBJECT= "Resource alert - daily "
-RECEIVER= "YOUR EMIAL" 
-TEXT=  `cat /tmp/capa.log` 
+SUBJECT="Resource alert - daily "
+RECEIVER="YOUR EMIAL" 
+TEXT=`cat /tmp/capa.log` 
 
 SERVER_NAME=$HOSTNAME  
 SENDER=$(whoami)  
