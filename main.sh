@@ -85,6 +85,6 @@ if [ $EMAIL_FALG_COUNT -gt 0 ]
             exit $?;
     else
             cat /tmp/capa.log
-            echo $EMAIL_FALG_COUNT;
+            #echo $EMAIL_FALG_COUNT;
             exit
 fi
