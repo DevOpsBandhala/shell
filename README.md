@@ -15,6 +15,11 @@
     RECEIVER= "YOUR EMIAL" \
     SENDER="YOUR SENDER ID" \ 
     USER="USER NAME"
-    
+
 #### Developmented in 
     Unix bash shell script
+
+##### Developed by
+        Bandhala Raja S
+        email: bandhalaraja@outlook.com
+        

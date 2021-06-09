@@ -1,11 +1,19 @@
 #!/bin/bash
 now=`date -u -d"+8 hour" +'%Y-%m-%d %H:%M:%S'`
 #cpu use threshold
+<<<<<<< HEAD
 cpu_warn='5'
 #mem idle threshold
 mem_warn='5'
 #disk use threshold
 disk_warn='5'
+=======
+cpu_warn='75'
+#mem idle threshold
+mem_warn='100'
+#disk use threshold
+disk_warn='90'
+>>>>>>> 146b6116af384f3d6a724a3d6ed49b06695c5512
 #clear old log file
  >/tmp/capa.log
 #email errot count flag
@@ -64,6 +72,7 @@ if [ $disk_use -gt $disk_warn ]
 fi
 }
 
+<<<<<<< HEAD
 
 item_disk_loop()
 {
@@ -85,6 +94,15 @@ item_disk_loop
 if [ $EMAIL_FALG_COUNT -gt 0 ] 
     then
             cat /tmp/capa.log
+=======
+#--- main function
+item_cpu
+item_mem
+item_disk
+
+if [ $EMAIL_FALG_COUNT -gt 0 ] 
+    then
+>>>>>>> 146b6116af384f3d6a724a3d6ed49b06695c5512
             #--- email configuration part
             SUBJECT="Resource alert - daily "
             RECEIVER="YOUR EMIAL" 
@@ -99,6 +117,10 @@ if [ $EMAIL_FALG_COUNT -gt 0 ]
             exit $?;
     else
             cat /tmp/capa.log
+<<<<<<< HEAD
             #echo $EMAIL_FALG_COUNT;
+=======
+            echo $EMAIL_FALG_COUNT;
+>>>>>>> 146b6116af384f3d6a724a3d6ed49b06695c5512
             exit
 fi
