@@ -1,7 +1,7 @@
 # Linux Resource monitoring script.
 ``` bash
-1. CPU \
-2. Memory \
+1. CPU\
+2. Memory\
 3. Disk 
 ```
 ## Params need to change for threshold limit.
