@@ -7,7 +7,11 @@ mem_warn='95'
 #disk use threshold
 disk_warn='20'
 #clear old log file
- >/tmp/capa.log
+>/tmp/capa.log
+
+#hostname
+HOST_NAME=`hostname`
+
 
 #---cpu
 item_cpu () {
@@ -83,7 +87,7 @@ cat /tmp/capa.log | grep 'FAIL' > /dev/null 2>&1
 if [ $? -eq 0 ]; then
     cat /tmp/capa.log
     #--- email configuration part
-    SUBJECT="Resource alert - daily "
+    SUBJECT="Resource Monitoring Alert -$HOST_NAME Date: $now"
     RECEIVER="YOUR EMIAL" 
     TEXT=`cat /tmp/capa.log` 
     
@@ -91,6 +95,8 @@ if [ $? -eq 0 ]; then
     SENDER=$(whoami)  
     USER="noreply"
     
+    
+
     MAIL_TXT="Subject: $SUBJECT\nFrom: $SENDER\nTo: $RECEIVER\n\n$TEXT"  
     echo -e $MAIL_TXT | sendmail -t 
     exit $?;
