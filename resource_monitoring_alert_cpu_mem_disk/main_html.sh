@@ -163,7 +163,7 @@ if [ $? -eq 0 ]; then
     
     
 
-    MAIL_TXT="Subject: $SUBJECT\nFrom: $SENDER\nTo: $RECEIVER\n\n$TEXT"  
+    MAIL_TXT="Subject: $SUBJECT\nContent-Type: text/html\nFrom: $SENDER\nTo: $RECEIVER\n\n$TEXT"
     echo -e $MAIL_TXT Content-Type: text/html | sendmail -t 
     exit $?;
 else
