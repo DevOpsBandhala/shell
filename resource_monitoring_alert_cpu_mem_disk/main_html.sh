@@ -3,7 +3,7 @@ now=`date -u -d"+8 hour" +'%Y-%m-%d %H:%M:%S'`
 #cpu use threshold
 cpu_warn='1'
 #mem idle threshold
-mem_warn='1'
+mem_warn='20'
 #disk use threshold
 disk_warn='1'
 #clear old log file
@@ -18,7 +18,7 @@ cat << 'EOF' >> /tmp/error_email.log
 <html>
 <head>
 <style>
-table {border-width: 2px; border-style: solid; border-color: black; border-collapse: collapse; width: 50%;}
+table {border-width: 2px; border-style: solid; border-color: black; border-collapse: collapse; width: auto;}
 th {border-width: 3px; padding: 3px; border-style: solid; border-color: black; background-color: rgb(0, 255, 128);}
 td {border-width: 1px; padding: 3px; border-style: solid; border-color: black; text-align: left;}
 </style>
@@ -38,7 +38,7 @@ EOF
 
       echo "<tr>" >> /tmp/error_email.log
       echo "<td>Server Name</td>" >> /tmp/error_email.log
-      echo "<td>"`hostname`"</td>" >> /tmp/error_email.log
+      echo "<td><b>"`hostname`"</b></td>" >> /tmp/error_email.log
       echo "<td>"NA"</td>" >> /tmp/error_email.log
       echo "</tr>">> /tmp/error_email.log
      
@@ -60,7 +60,7 @@ if [ $cpu_use -gt $cpu_warn ]
        #echo "$now current cpu utilization rate of $cpu_use - FAIL ">> /tmp/error_email.log;
        
       echo "<tr>" >> /tmp/error_email.log
-      echo "<td>Current cpu utilization rate</td>" >> /tmp/error_email.log
+      echo "<td>Current cpu utilization rate.<b><font color=#0a1df5>[$cpu_warn-threshold limit ]</font></b></td>" >> /tmp/error_email.log
       echo "<td>"$cpu_use"</td>" >> /tmp/error_email.log
       echo "<td style="color:red">FAIL</td>" >> /tmp/error_email.log
       echo "</tr>">> /tmp/error_email.log
@@ -75,15 +75,17 @@ fi
 #---mem
 item_mem () {
  #MB units
-mem_free=`free -m | grep "Mem" | awk '{print $4+$6}'`
+ #Utilized memory
+mem_free=` free | grep Mem | awk '{print $3/$2 * 100.00}' | awk '{printf("%d\n",$1 + 0.5)}'`
  
-if [ $mem_free -lt $mem_warn  ]
+if [ $mem_warn -lt ${mem_free%.*} ]
+#if [ $($mem_free > $mem_warn | bc) -ne 0 ] 
     then
         #echo "$now the current memory space remaining ${mem_free} MB - FAIL" >> /tmp/error_email.log
         #echo "mem warning!!!"
       echo "<tr>" >> /tmp/error_email.log
-      echo "<td>Current remaining memory space</td>" >> /tmp/error_email.log
-      echo "<td>"$mem_free"</td>" >> /tmp/error_email.log
+      echo "<td>Current remaining memory space.<b><font color=#0a1df5>[$mem_warn %- Utilized threshold limit ]</font></b></td>" >> /tmp/error_email.log
+      echo "<td>$mem_free % memory utilized</td>" >> /tmp/error_email.log
       echo "<td style="color:red">FAIL</td>" >> /tmp/error_email.log
       echo "</tr>">> /tmp/error_email.log
         
@@ -120,8 +122,9 @@ item_disk_loop()
          #echo "$now current $fs_name utilized $used_space % of space and $aval_space MB space only available - FAIL">> /tmp/error_email.log ;\
 
       echo "<tr>" >> /tmp/error_email.log
-      echo "<td>Currently $fs_name utilized $used_space % of space and available space </td>" >> /tmp/error_email.log
-      echo "<td>"$aval_space"</td>" >> /tmp/error_email.log
+      echo "<td>Currently $fs_name utilized $used_space % of space.<b><font color=#0a1df5>[$disk_warn %- Utilized threshold limit ]</font></b></td>" >> /tmp/error_email.log
+      #gb=$(( aval_space * 1024*1024 ))
+      echo "<td>$aval_space-MB of sapce available</td>" >> /tmp/error_email.log
       echo "<td style="color:red">FAIL</td>" >> /tmp/error_email.log
       echo "</tr>">> /tmp/error_email.log
 
@@ -163,8 +166,8 @@ if [ $? -eq 0 ]; then
     
     
 
-    MAIL_TXT="Subject: $SUBJECT\nContent-Type: text/html\nFrom: $SENDER\nTo: $RECEIVER\n\n$TEXT"
-    echo -e $MAIL_TXT Content-Type: text/html | sendmail -t 
+    MAIL_TXT="Subject: $SUBJECT\nContent-Type: text/html\nFrom: $SENDER\nTo: $RECEIVER\n\n$TEXT"  
+    echo -e $MAIL_TXT | sendmail -t 
     exit $?;
 else
     cat /tmp/capa.log 
