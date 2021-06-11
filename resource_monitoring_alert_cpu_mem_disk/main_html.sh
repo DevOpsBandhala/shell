@@ -122,9 +122,10 @@ item_disk_loop()
          #echo "$now current $fs_name utilized $used_space % of space and $aval_space MB space only available - FAIL">> /tmp/error_email.log ;\
 
       echo "<tr>" >> /tmp/error_email.log
-      echo "<td>Currently $fs_name utilized $used_space % of space.<b><font color=#0a1df5>[$disk_warn %- Utilized threshold limit ]</font></b></td>" >> /tmp/error_email.log
+      echo "<td>Currently $fs_name utilized $aval_space MB of space available.<b><font color=#0a1df5>[$disk_warn %- Utilized threshold limit ]</font></b></td>" >> /tmp/error_email.log
       #gb=$(( aval_space * 1024*1024 ))
-      echo "<td>$aval_space-MB of sapce available</td>" >> /tmp/error_email.log
+       echo "<td>$used_space-% of sapce utilized</td>" >> /tmp/error_email.log
+      #echo "<td>$aval_space-MB of sapce available</td>" >> /tmp/error_email.log
       echo "<td style="color:red">FAIL</td>" >> /tmp/error_email.log
       echo "</tr>">> /tmp/error_email.log
 
