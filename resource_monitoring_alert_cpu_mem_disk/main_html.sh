@@ -131,14 +131,12 @@ item_disk_loop()
           fi; \
     done;
 }
-cat << 'EOF' >> /tmp/error_email.log
-</tbody>
-  
-</table>
 
-</body>
-</html>
-EOF
+echo "</tbody>">> /tmp/error_email.log
+echo "</table>">> /tmp/error_email.log
+echo "</body>">> /tmp/error_email.log
+echo "</html>">> /tmp/error_email.log
+
 
 #--- main function
 item_cpu
